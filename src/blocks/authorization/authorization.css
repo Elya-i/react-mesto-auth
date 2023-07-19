@@ -1,0 +1,140 @@
+.authorization {
+  min-height: 100vh;
+  width: 100%;
+}
+
+.authorization__container {
+  max-width: 358px;
+  margin: 0 auto;
+  padding-top: 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+@media screen and (max-width: 620px) {
+  .authorization__container {
+    padding-top: 40px;
+    padding-left: 30px;
+    padding-right: 30px;
+    max-width: 260px;
+  }
+}
+
+.authorization__title {
+  margin: 0;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 900;
+  line-height: 29px;
+}
+
+@media screen and (max-width: 620px) {
+  .authorization__title {
+    font-size: 18px;
+    line-height: 22px;
+  }
+}
+
+.authorization__form {
+  width: 100%;
+  padding-top: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 350px;
+}
+
+@media screen and (max-width: 620px) {
+  .authorization__form {
+    padding-top: 40px;
+    min-height: 297px;
+  }
+}
+
+.authorization__input-container {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.authorization__input {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 17px;
+  border: none;
+  border-bottom: 2px solid #cccccc;
+  background-color: transparent;
+  color: inherit;
+  outline: none;
+  padding: 0 0 13px;
+  height: 27px;
+  box-sizing: border-box;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.authorization__input-error {
+  margin: 0;
+  height: 30px;
+  padding: 5px 0 13px;
+  color: #FF0000;
+  font-size: 12px;
+  line-height: 15px;
+  font-weight: 400;
+}
+
+
+.authorization__submit-btn {
+  background-color: #ffffff;
+  color: #000000;
+  margin: 0;
+  padding: 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  min-height: 50px;
+  border-radius: 2px;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 22px;
+}
+
+.authorization__submit-btn:hover {
+  opacity: 0.85;
+}
+
+@media screen and (max-width: 620px) {
+  .authorization__submit-btn {
+    margin-top: 15px;
+    font-size: 14px;
+    line-height: 17px;
+    min-height: 46px;
+  }
+}
+
+.authorization__link-container {
+  width: 100%;
+  padding-top: 15px;
+  text-align: center;
+}
+
+@media screen and (max-width: 620px) {
+  .authorization__link-container {
+    padding-top: 20px;
+  }
+};
+  
+.authorization__link {
+  margin: 0;
+  padding: 0;
+  max-width: 100%;
+  font-size: 14px;
+  line-height: 17px;
+  font-weight: 400;
+  text-align: center;
+  color: #ffffff;
+  text-decoration: none;
+}
