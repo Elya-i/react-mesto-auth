@@ -3,6 +3,8 @@
   padding: 0;
   border: none;
   background: transparent;
+  font-size: 18px;
+  line-height: 22px;
   font-weight: 400;
   color: #a9a9a9;
   text-decoration: none;
@@ -12,4 +14,11 @@
 
 .header__btn:hover {
   opacity: .6;
+}
+
+@media screen and (max-width: 620px) {
+  .header__btn {
+    font-size: 14px;
+    line-height: 18px;
+  }
 }

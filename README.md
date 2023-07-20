@@ -3,14 +3,12 @@
 ### Описание
  Интерактивный одностраничный сервис для взаимодействия с сервером с возможностью добавления и удаления фотографий, а также их оценки. 
 
-### В ходе 10-го и 11 спринтов:
-Выполнено портирование проекта "Mesto" на React.js, а также подключение к серверу через API.
-Реализована валидация форм посредством хука useValidation.
-
 ### В ходе 12-го спринта:
+Добавлен функционал регистрации и авторизации пользователей на сайте в своем личном кабинете.
 
 ### Рассмотренные технологии:
 * ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
+* ![React Router](https://img.shields.io/badge/React_Router-CA4245?style=for-the-badge&logo=react-router&logoColor=white)
 * Nested БЭМ
 * useState, useEffect, useValidations Hooks
 * Functional components

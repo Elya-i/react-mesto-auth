@@ -4,14 +4,6 @@ function Login({ onLogin, submitText}) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  function handleChangeEmail({ target }) {
-    setEmail(target.value);
-  }
-
-  function handleChangePassword({ target }) {
-    setPassword(target.value);
-}
-
   function handleSubmit(e) {
     e.preventDefault();
     onLogin(email, password)
@@ -32,7 +24,7 @@ function Login({ onLogin, submitText}) {
                 minLength="2"
                 maxLength="40"
                 value={email || ''}
-                onChange={handleChangeEmail}
+                onChange={({ target:{ value }}) => setEmail(value)}
                 noValidate
                 required />
               <input
@@ -44,7 +36,7 @@ function Login({ onLogin, submitText}) {
                 minLength="2"
                 maxLength="200"
                 value={password || ''}
-                onChange={handleChangePassword}
+                onChange={({ target:{ value }}) => setPassword(value)}
                 noValidate
                 required />
             </div>

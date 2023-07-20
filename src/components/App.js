@@ -52,6 +52,7 @@ function App() {
   }, [loggedIn])
 
   function handleRegister(email, password) {
+    setIsLoading(true);
     auth.register(email, password)
     .then(({ data }) => {
       setIsSignUpSuccessful(true);
@@ -62,9 +63,11 @@ function App() {
       setIsSignUpSuccessful(false)
       openInfoTooltip() 
     })
+    .finally(() => setIsLoading(false));
   }
 
   function handleLogin(email, password) {
+    setIsLoading(true);
     auth.authorize(email, password)
     .then(() => {
       setEmail(email)
@@ -75,7 +78,8 @@ function App() {
       setLoggedIn(false);
       setIsSignUpSuccessful(false);
       openInfoTooltip() 
-    });
+    })
+    .finally(() => setIsLoading(false));
   }
 
   function handleSignOut() {
@@ -202,7 +206,7 @@ function App() {
       <CurrentUserContext.Provider value={currentUser}>
         <Header loggedIn={loggedIn} email={email} onSignOut={handleSignOut} />
         <Routes>
-          <Route path="/" element={<ProtectedRoute element={Main}
+          <Route path="/" element={<ProtectedRoute component={Main}
             loggedIn={loggedIn}
             cards={cards}
             onEditProfile={handleEditProfileClick}
@@ -212,8 +216,8 @@ function App() {
             onCardLike={handleCardLike}
             onCardDelete={handleConfirmationClick}
           />} />
-          <Route path="/sign-up" element={<Register submitText="Зарегистрироваться" onRegister={handleRegister} />} />
-          <Route path="/sign-in" element={<Login submitText="Войти" onLogin={handleLogin}/>} />
+          <Route path="/sign-up" element={<Register submitText={isLoading ? "Регистрация..." : "Зарегистрироваться"} onRegister={handleRegister} />} />
+          <Route path="/sign-in" element={<Login submitText={isLoading ? "Вход..." : "Войти"} onLogin={handleLogin}/>} />
           <Route path="*" element={loggedIn ? <Navigate to="/" replace /> : <Navigate to="/sign-in" replace />} />
         </Routes>
         

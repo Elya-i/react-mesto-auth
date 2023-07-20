@@ -5,21 +5,13 @@ function Register({ onRegister, submitText}) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  function handleChangeEmail({ target }) {
-    setEmail(target.value);
-  }
-
-  function handleChangePassword({ target }) {
-    setPassword(target.value);
-}
-
   function handleSubmit(e) {
     e.preventDefault();
     onRegister(email, password)
   }
 
   return (
-    <section className={"authorization"}>
+    <section className="authorization">
       <div className="authorization__container">
         <h2 className="authorization__title">Регистрация</h2>
         <form className="authorization__form" name="register" noValidate onSubmit={handleSubmit}>
@@ -33,7 +25,7 @@ function Register({ onRegister, submitText}) {
                 minLength="2"
                 maxLength="40"
                 value={email || ''}
-                onChange={handleChangeEmail}
+                onChange={({ target:{ value }}) => setEmail(value)}
                 noValidate
                 required />
               <input
@@ -45,7 +37,7 @@ function Register({ onRegister, submitText}) {
                 minLength="2"
                 maxLength="200"
                 value={password || ''}
-                onChange={handleChangePassword}
+                onChange={({ target:{ value }}) => setPassword(value)}
                 noValidate
                 required />
             </div>
