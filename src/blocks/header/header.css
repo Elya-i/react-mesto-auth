@@ -15,21 +15,3 @@
     padding-bottom: 32px;
   }
 }
-
-.header__menu {
-  margin: 0;
-  padding: 0;
-  display: flex;
-  gap: 15px;
-  height: 100%;
-}
-
-.header__link {
-  text-decoration: none;
-  color: #ffffff;
-  cursor: pointer;
-}
-
-.header__link:hover {
-  opacity: 0.60;
-}

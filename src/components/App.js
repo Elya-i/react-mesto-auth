@@ -3,7 +3,6 @@ import { Route, Routes, Navigate, useNavigate } from 'react-router-dom';
 import ProtectedRoute from './ProtectedRoute';
 import Header from './Header';
 import Main from './Main';
-import Footer from './Footer';
 import ImagePopup from './ImagePopup';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import api from '../utils/api';
@@ -21,6 +20,7 @@ function App() {
   const [isAddPlacePopupOpen, setAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = useState(false);
   const [isConfimationPopupOpen, setConfirmationPopupOpen] = useState(false);
+  const [isInfoTooltipOpen, setInfoTooltipOpen ] = useState(false);
   
   const [ isLoading, setIsLoading ] = useState(false);
   
@@ -33,7 +33,7 @@ function App() {
 
   const [email, setEmail] = useState('');
   const [loggedIn, setLoggedIn] = useState(true);
-  
+  const [isSignUpSuccessful, setIsSignUpSuccessful] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -52,7 +52,16 @@ function App() {
   }, [loggedIn])
 
   function handleRegister(email, password) {
-    auth.register(email, password);
+    auth.register(email, password)
+    .then(({ data }) => {
+      setIsSignUpSuccessful(true);
+      openInfoTooltip() 
+      handleLogin(data.email, password);
+    })
+    .catch(err => {
+      setIsSignUpSuccessful(false)
+      openInfoTooltip() 
+    })
   }
 
   function handleLogin(email, password) {
@@ -64,6 +73,8 @@ function App() {
     })
     .catch(() => {
       setLoggedIn(false);
+      setIsSignUpSuccessful(false);
+      openInfoTooltip() 
     });
   }
 
@@ -108,6 +119,10 @@ function App() {
     setRemovalCard(card);
   }
 
+  function openInfoTooltip() {
+    setInfoTooltipOpen(true);
+  }
+
   function closeAllPopups() {
     setEditProfilePopupOpen(false);
     setAddPlacePopupOpen(false);
@@ -115,6 +130,7 @@ function App() {
     setConfirmationPopupOpen(false);
     setSelectedCard(null);
     setRemovalCard({});
+    setInfoTooltipOpen(false);
   }
 
   function handleCardLike(card) {
@@ -196,11 +212,10 @@ function App() {
             onCardLike={handleCardLike}
             onCardDelete={handleConfirmationClick}
           />} />
-          <Route path="/sign-up" element={<Register onRegister={handleRegister} />} />
-          <Route path="/sign-in" element={<Login onLogin={handleLogin} />} />
+          <Route path="/sign-up" element={<Register submitText="Зарегистрироваться" onRegister={handleRegister} />} />
+          <Route path="/sign-in" element={<Login submitText="Войти" onLogin={handleLogin}/>} />
           <Route path="*" element={loggedIn ? <Navigate to="/" replace /> : <Navigate to="/sign-in" replace />} />
         </Routes>
-        <Footer />
         
         <EditProfilePopup 
           isOpen={isEditProfilePopupOpen} 
@@ -234,6 +249,12 @@ function App() {
         <ImagePopup 
           card={selectedCard}
           onClose={closeAllPopups} 
+        />
+
+        <InfoTooltip
+          isOpen={isInfoTooltipOpen}
+          onClose={closeAllPopups}
+          isSuccess={isSignUpSuccessful}
         />
       </CurrentUserContext.Provider>
     </div>
