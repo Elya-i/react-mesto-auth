@@ -22,19 +22,17 @@ function Card({ card, onCardClick, onCardLike, onCardDelete }) {
   }
 
   return (
-    <li className="element">
-      <article>
-        <img src={card.link} alt={card.name} className="element__image" onClick={handleCardClick} />
-        {isOwn && <button type="button" className="element__delete-btn" onClick={handleDeleteClick} />}
-        <div className="element__caption">
-          <h2 className="element__name">{card.name}</h2>
-          <div className="element__like">
-            <button type="button" className={cardLikeButtonClassName} onClick={handleLikeClick} />
-            <span className="element__like-counter">{card.likes.length}</span>
-          </div>
+    <article>
+      <img src={card.link} alt={card.name} className="element__image" onClick={handleCardClick} />
+      {isOwn && <button type="button" className="element__delete-btn" onClick={handleDeleteClick} />}
+      <div className="element__caption">
+        <h2 className="element__name">{card.name}</h2>
+        <div className="element__like">
+          <button type="button" className={cardLikeButtonClassName} onClick={handleLikeClick} />
+          <span className="element__like-counter">{card.likes.length}</span>
         </div>
-      </article>
-    </li>
+      </div>
+    </article>
   );
 }
 

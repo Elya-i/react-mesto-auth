@@ -26,7 +26,6 @@ function Register({ onRegister, submitText}) {
                 maxLength="40"
                 value={email || ''}
                 onChange={({ target:{ value }}) => setEmail(value)}
-                noValidate
                 required />
               <input
                 id="password-input"
@@ -38,7 +37,6 @@ function Register({ onRegister, submitText}) {
                 maxLength="200"
                 value={password || ''}
                 onChange={({ target:{ value }}) => setPassword(value)}
-                noValidate
                 required />
             </div>
             <button className="authorization__submit-btn" type="submit">{submitText}</button>

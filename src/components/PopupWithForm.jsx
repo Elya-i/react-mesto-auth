@@ -1,30 +1,52 @@
 import React, { useEffect } from 'react';
 
 function PopupWithForm(props) {
+  const {
+    name,
+    title,
+    submitText,
+    isOpen,
+    isDisabled,
+    children,
+    onClose,
+    onSubmit
+  } = props;
 
   function closeByOverlayClick(event) {
-    if (event.target.classList.contains('popup')) props.onClose();
-  }
-
-  function handleCloseByEsc(event) {
-    if (event.key === 'Escape') {
-      props.onClose()
+    if (event.target.classList.contains('popup')) {
+      onClose();
     }
   }
 
   useEffect(() => {
-    document.addEventListener('keydown', handleCloseByEsc);
-    return () => {document.removeEventListener('keydown', handleCloseByEsc)};
-  })
+    const handleCloseByEsc = (event) => {
+      if (event.key === 'Escape') {
+        onClose()
+      }
+    }
+
+    if (isOpen) {
+      document.addEventListener('keydown', handleCloseByEsc);
+
+      return () => {
+        document.removeEventListener('keydown', handleCloseByEsc)
+      };
+    }
+  }, [isOpen, onClose])
   
   return (
-    <div onClick={closeByOverlayClick} className={`popup popup_type_${props.name} ${props.isOpen ? 'popup_opened' : ''}`}>
+    <div onClick={closeByOverlayClick} className={`popup popup_type_${name} ${isOpen ? 'popup_opened' : ''}`}>
       <div className="popup__container">
-        <h2 className="popup__title">{props.title}</h2>
-        <button type="button" className="popup__close-btn" onClick={props.onClose}></button>
-        <form className="popup__form" name={props.name} noValidate onSubmit={props.onSubmit}>
-          {props.children}
-          <button disabled={props.isDisabled} type="submit" className={ props.isDisabled ? "popup__button popup__button-submit popup__button_disabled" : "popup__button popup__button-submit" }>{props.submitText}</button>
+        <h2 className="popup__title">{title}</h2>
+        <button type="button" className="popup__close-btn" onClick={onClose}></button>
+        <form className="popup__form" name={name} noValidate onSubmit={onSubmit}>
+          {children}
+          <button
+            disabled={isDisabled}
+            type="submit"
+            className={`popup__button popup__button-submit ${isDisabled ? 'popup__button_disabled' : ''} `}>
+              {submitText}
+            </button>
         </form>
       </div>
     </div>

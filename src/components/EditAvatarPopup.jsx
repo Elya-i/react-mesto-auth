@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import PopupWithForm from './PopupWithForm';
-import useFormValidation from '../utils/useFormValidation';
+import useFormValidation from '../hooks/useFormValidation';
 
 function EditProfilePopup({ isOpen, onClose, onUpdateAvatar, isLoading }) {
   const { values, errors, isValid, onChange, resetValidation } = useFormValidation();

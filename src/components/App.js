@@ -3,6 +3,7 @@ import { Route, Routes, Navigate, useNavigate } from 'react-router-dom';
 import ProtectedRoute from './ProtectedRoute';
 import Header from './Header';
 import Main from './Main';
+import Footer from './Footer';
 import ImagePopup from './ImagePopup';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import api from '../utils/api';
@@ -14,15 +15,21 @@ import ConfirmationPopup from './ConfirmationPopup';
 import Register from './Register';
 import Login from './Login';
 import InfoTooltip from './InfoTooltip';
+import successIcon from '../images/success.svg'
+import failIcon from '../images/fail.svg'
 
 function App() {
   const [isEditProfilePopupOpen, setEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = useState(false);
-  const [isConfimationPopupOpen, setConfirmationPopupOpen] = useState(false);
+  const [isConfirmationPopupOpen, setConfirmationPopupOpen] = useState(false);
   const [isInfoTooltipOpen, setInfoTooltipOpen ] = useState(false);
   
-  const [ isLoading, setIsLoading ] = useState(false);
+  const [isEditProfilePopupLoading, setEditProfilePopupLoading ] = useState(false);
+  const [isAddPlacePopupLoading, setAddPlacePopupLoading] = useState(false);
+  const [isEditAvatarPopupLoading, setEditAvatarPopupLoading] = useState(false);
+  const [isConfirmationPopupLoading, setConfirmationPopupLoading] = useState(false);
+  const [isInfoTooltipLoading, setInfoTooltipLoading] = useState(false);
   
   const [selectedCard, setSelectedCard] = useState(null);
 
@@ -32,8 +39,8 @@ function App() {
   const [removalCard, setRemovalCard] = useState({});
 
   const [email, setEmail] = useState('');
-  const [loggedIn, setLoggedIn] = useState(true);
-  const [isSignUpSuccessful, setIsSignUpSuccessful] = useState(true);
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [isSuccessInfoTooltipStatus, setIsSuccessInfoTooltipStatus] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -52,22 +59,22 @@ function App() {
   }, [loggedIn])
 
   function handleRegister(email, password) {
-    setIsLoading(true);
+    setInfoTooltipLoading(true);
     auth.register(email, password)
     .then(({ data }) => {
-      setIsSignUpSuccessful(true);
-      openInfoTooltip() 
+      setIsSuccessInfoTooltipStatus(true);
+      openInfoTooltip();
       handleLogin(data.email, password);
     })
     .catch(err => {
-      setIsSignUpSuccessful(false)
+      setIsSuccessInfoTooltipStatus(false)
       openInfoTooltip() 
     })
-    .finally(() => setIsLoading(false));
+    .finally(() => setInfoTooltipLoading(false));
   }
 
   function handleLogin(email, password) {
-    setIsLoading(true);
+    setInfoTooltipLoading(true);
     auth.authorize(email, password)
     .then(() => {
       setEmail(email)
@@ -76,10 +83,10 @@ function App() {
     })
     .catch(() => {
       setLoggedIn(false);
-      setIsSignUpSuccessful(false);
+      setIsSuccessInfoTooltipStatus(false);
       openInfoTooltip() 
     })
-    .finally(() => setIsLoading(false));
+    .finally(() => setInfoTooltipLoading(false));
   }
 
   function handleSignOut() {
@@ -89,8 +96,10 @@ function App() {
     navigate('/sign-in');
   }
 
-  function checkToken() {
-    auth.checkToken(localStorage.getItem('jwt'))
+  function checkToken()  {
+    const jwt = localStorage.getItem('jwt');
+    if (jwt) {
+      auth.checkToken(jwt)
       .then(({ data }) => {
         setLoggedIn(true);
         setEmail(data.email);
@@ -100,6 +109,7 @@ function App() {
         setLoggedIn(false);
         setEmail('');
       });
+    }
   }
 
   function handleEditProfileClick() {
@@ -149,34 +159,32 @@ function App() {
   }
 
   function handleCardDelete(card) {
-    setIsLoading(true)
+    setConfirmationPopupLoading(true)
     api.deleteCard(card._id)
       .then(() => {
         setCards((state) => state.filter((c) => c._id !== card._id));
         closeAllPopups();
+        setRemovalCard({});
       })
       .catch(err => console.log(err))
       .finally(() => {
-        setIsLoading(false);
-        setRemovalCard({});
+        setConfirmationPopupLoading(false);
       });
   }
 
   function handleUpdateUser(userData) {
-    setIsLoading(true)
+    setEditProfilePopupLoading(true)
     api.sendUserData(userData)
       .then((newUserData) => {
         setCurrentUser(newUserData);
-      })
-      .then(() => {
         closeAllPopups();
       })
       .catch(err => console.log(err))
-      .finally(() => setIsLoading(false));
+      .finally(() => setEditProfilePopupLoading(false));
   }
 
   function handleUpdateAvatar(userData) {
-    setIsLoading(true);
+    setEditAvatarPopupLoading(true);
     api.updateUserAvatar(userData)
       .then((newUserData) => {
         setCurrentUser(newUserData);
@@ -185,11 +193,11 @@ function App() {
         closeAllPopups();
       })
       .catch(err => console.log(err))
-      .finally(() => setIsLoading(false));
+      .finally(() => setEditAvatarPopupLoading(false));
   }
 
   function handleAddPlaceSubmit(card) {
-    setIsLoading(true)
+    setAddPlacePopupLoading(true)
     api.postNewCard(card)
       .then((newCard) => {
         setCards([newCard, ...cards]);
@@ -198,7 +206,7 @@ function App() {
         closeAllPopups();
       })
       .catch(err => console.log(err))
-      .finally(() => setIsLoading(false));
+      .finally(() => setAddPlacePopupLoading(false));
   }
 
   return (
@@ -216,38 +224,40 @@ function App() {
             onCardLike={handleCardLike}
             onCardDelete={handleConfirmationClick}
           />} />
-          <Route path="/sign-up" element={<Register submitText={isLoading ? "Регистрация..." : "Зарегистрироваться"} onRegister={handleRegister} />} />
-          <Route path="/sign-in" element={<Login submitText={isLoading ? "Вход..." : "Войти"} onLogin={handleLogin}/>} />
+          <Route path="/sign-up" element={<Register submitText={isInfoTooltipLoading ? "Регистрация..." : "Зарегистрироваться"} onRegister={handleRegister} />} />
+          <Route path="/sign-in" element={<Login submitText={isInfoTooltipLoading ? "Вход..." : "Войти"} onLogin={handleLogin}/>} />
           <Route path="*" element={loggedIn ? <Navigate to="/" replace /> : <Navigate to="/sign-in" replace />} />
         </Routes>
+
+        {loggedIn && <Footer />}
         
         <EditProfilePopup 
           isOpen={isEditProfilePopupOpen} 
           onClose={closeAllPopups} 
           onUpdateUser={handleUpdateUser} 
-          isLoading={isLoading} 
+          isLoading={isEditProfilePopupLoading} 
         />
 
         <EditAvatarPopup 
           isOpen={isEditAvatarPopupOpen} 
           onClose={closeAllPopups} 
           onUpdateAvatar={handleUpdateAvatar} 
-          isLoading={isLoading} 
+          isLoading={isEditAvatarPopupLoading} 
         />
 
         <AddPlacePopup 
           isOpen={isAddPlacePopupOpen} 
           onClose={closeAllPopups} 
           onAddPlace={handleAddPlaceSubmit} 
-          isLoading={isLoading} 
+          isLoading={isAddPlacePopupLoading} 
         />
 
         <ConfirmationPopup 
-          isOpen={isConfimationPopupOpen} 
+          isOpen={isConfirmationPopupOpen} 
           onClose={closeAllPopups} 
           onDeleteCard={handleCardDelete} 
           card={removalCard} 
-          isLoading={isLoading} 
+          isLoading={isConfirmationPopupLoading} 
         />
         
         <ImagePopup 
@@ -258,7 +268,10 @@ function App() {
         <InfoTooltip
           isOpen={isInfoTooltipOpen}
           onClose={closeAllPopups}
-          isSuccess={isSignUpSuccessful}
+          isSuccess={isSuccessInfoTooltipStatus}
+          isLoading={isInfoTooltipLoading}
+          successIcon={successIcon}
+          failIcon={failIcon}
         />
       </CurrentUserContext.Provider>
     </div>

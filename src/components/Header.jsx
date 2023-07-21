@@ -8,8 +8,8 @@ function Header({ loggedIn, email, onSignOut }) {
   const signInPath = '/sign-in';
   const signUpPath = '/sign-up';
 
-  const isSignIn = pathname !== signInPath && pathname !== signUpPath;
-  const isSignOut = loggedIn && isSignIn;
+  const isMainPage = pathname !== signInPath && pathname !== signUpPath;
+  const isSignOut = loggedIn && isMainPage;
 
   return (
     <header className="header">
@@ -17,7 +17,7 @@ function Header({ loggedIn, email, onSignOut }) {
       <div className="header__info">
         {pathname === signInPath && (<Link to={signUpPath} className="header__link">Регистрация</Link>)}
         {pathname === signUpPath && (<Link to={signInPath} className="header__link">Войти</Link>)}
-        {isSignIn && <p className="header__email">{email}</p>}
+        {isMainPage && <p className="header__email">{email}</p>}
         {isSignOut && (<button type='button' className="header__btn" onClick={onSignOut}>Выйти</button>)}
       </div>
     </header>

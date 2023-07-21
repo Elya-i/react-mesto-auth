@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
 import Card from "./Card";
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
-import Footer from './Footer';
 
 function Main({ cards, onEditProfile, onEditAvatar, onAddPlace, onCardClick, onCardDelete, onCardLike }) {
   const currentUser = useContext(CurrentUserContext);
@@ -27,13 +26,13 @@ function Main({ cards, onEditProfile, onEditAvatar, onAddPlace, onCardClick, onC
         <section className="elements" aria-label="Карточки с изображениями">
           <ul className="elements__list">
             {cards.map(card => (
-              <Card card={card} key={card._id} onCardClick={onCardClick} onCardDelete={onCardDelete} onCardLike={onCardLike}/>
+              <li className="element" key={card._id}>
+                <Card card={card} onCardClick={onCardClick} onCardDelete={onCardDelete} onCardLike={onCardLike}/>
+              </li>
             ))}
           </ul>
         </section>
-
       </main>
-      <Footer />
     </>
   );
 }
