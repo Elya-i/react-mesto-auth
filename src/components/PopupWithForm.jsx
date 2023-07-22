@@ -32,7 +32,7 @@ function PopupWithForm(props) {
         document.removeEventListener('keydown', handleCloseByEsc)
       };
     }
-  }, [isOpen, onClose])
+  }, [isOpen]) 
   
   return (
     <div onClick={closeByOverlayClick} className={`popup popup_type_${name} ${isOpen ? 'popup_opened' : ''}`}>

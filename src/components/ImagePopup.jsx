@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-function ImagePopup({ card, onClose }) {
+function ImagePopup({ card, isOpen, onClose }) {
   function closeByOverlayClick(event) {
     if (event.target.classList.contains('popup')) {
       onClose();
@@ -21,7 +21,7 @@ function ImagePopup({ card, onClose }) {
         document.removeEventListener('keydown', handleCloseByEsc)
       };
     }
-  }, [card, onClose])
+  }, [isOpen]) 
 
   return (
    <div onClick={closeByOverlayClick} className={`popup popup_type_image ${card ? 'popup_opened' : ''}`}>
